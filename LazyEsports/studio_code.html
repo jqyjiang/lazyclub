@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主播同款 - 慵懒电竞</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pink: { light: '#FFF0F3', DEFAULT: '#FF6B81', dark: '#E84A5F' },
+                        purple: { light: '#F3E8FF', DEFAULT: '#A855F7', dark: '#7C3AED' },
+                        pixel: '#2D3436',
+                    },
+                    fontFamily: { cartoon: ['"Noto Sans SC"', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .neo-shadow { box-shadow: 6px 6px 0px #2D3436; }
+            .neo-shadow-hover:hover { box-shadow: 10px 10px 0px #FF6B81; transform: translate(-2px, -4px); }
+            .modal-glass { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px); }
+            .no-scrollbar::-webkit-scrollbar { width: 6px; }
+            .no-scrollbar::-webkit-scrollbar-thumb { background: #FF6B81; border-radius: 10px; }
+        }
+        body { background-color: #FFF8F9; background-image: radial-gradient(#FF6B81 0.5px, transparent 0.5px); background-size: 20px 20px; }
+    </style>
+</head>
+<body class="text-pixel font-cartoon min-h-screen pb-20">
+
+    <!-- 返回按钮 -->
+    <a href="index.html" class="fixed top-6 left-6 z-40 bg-white border-2 border-pixel shadow-[4px_4px_0px_#2D3436] rounded-full px-4 py-2 font-bold hover:-translate-y-1 transition-transform flex items-center gap-2">
+        <i class="fas fa-arrow-left text-pink"></i> 返回
+    </a>
+
+    <!-- 头部 -->
+    <header class="pt-20 pb-12 text-center px-4">
+        <h1 class="text-5xl font-black mb-4">主播<span class="text-purple">同款</span></h1>
+        <p class="text-gray-600 font-bold bg-white px-6 py-2 rounded-full border-2 border-pixel inline-block">精选推荐，每一件都值得入手！</p>
+    </header>
+
+    <!-- 卡片网格 -->
+    <main class="max-w-3xl mx-auto px-4">
+        <div class="grid grid-cols-1 gap-6" id="anchorGrid">
+            <!-- JS 自动注入 -->
+        </div>
+    </main>
+
+    <!-- 弹窗 -->
+    <div id="imageModal" class="fixed inset-0 z-50 hidden modal-glass opacity-0 transition-opacity duration-300 flex items-center justify-center p-4">
+        <div id="modalContent" class="bg-white rounded-3xl border-[6px] border-pixel w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col scale-95 transition-all duration-300 shadow-[12px_12px_0px_#000]">
+            
+            <!-- 固定头部 -->
+            <div class="px-6 py-4 border-b-4 border-pixel bg-pink-light flex justify-between items-center shrink-0">
+                <h2 id="modalTitle" class="text-xl font-black text-pixel">标题</h2>
+                <button onclick="closeModal()" class="bg-white border-2 border-pixel w-9 h-9 rounded-full flex items-center justify-center hover:bg-pink hover:text-white transition-all hover:rotate-90">
+                    <i class="fas fa-times font-black"></i>
+                </button>
+            </div>
+
+            <!-- 独立滚动区域 -->
+            <div class="overflow-y-auto p-4 md:p-6 no-scrollbar flex-grow">
+                <img id="modalImage" src="" alt="详情图片" class="w-full h-auto rounded-xl">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 在此处添加新选项，网页会自动生成
+        const anchorData = [
+            { id: 1, title: '环游记', icon: 'fa-earth-americas', color: 'purple', imgUrl: 'img/huanyouji.jpg' },
+            { id: 2, title: '一命通关', icon: 'fa-heart-pulse', color: 'pink', imgUrl: 'img/yiming.jpg' }
+        ];
+
+        const grid = document.getElementById('anchorGrid');
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
+
+        // 生成卡片函数
+        anchorData.forEach(item => {
+            grid.insertAdjacentHTML('beforeend', `
+                <button onclick="openModal('${item.title}', '${item.imgUrl}')" 
+                    class="bg-white p-6 rounded-3xl border-4 border-pixel neo-shadow neo-shadow-hover flex items-center gap-6 group text-left w-full transition-all">
+                    
+                    <div class="w-16 h-16 flex-shrink-0 bg-${item.color}-light rounded-2xl border-2 border-pixel flex items-center justify-center">
+                        <i class="fas ${item.icon} text-2xl ${item.color === 'purple' ? 'text-purple' : 'text-pink'}"></i>
+                    </div>
+                    
+                    <div class="flex-grow">
+                        <h3 class="text-xl font-black text-pixel group-hover:text-pink transition-colors">${item.title}</h3>
+                        <p class="text-gray-400 text-sm font-bold mt-1">点击查看详细介绍</p>
+                    </div>
+                    
+                    <i class="fas fa-chevron-right text-gray-300 group-hover:text-pink transition-colors"></i>
+                </button>
+            `);
+        });
+
+        function openModal(title, url) {
+            modalTitle.innerText = title;
+            modalImage.src = url;
+            modal.classList.remove('hidden');
+            // 小延迟触发动画
+            setTimeout(() => { 
+                modal.classList.remove('opacity-0'); 
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => { modal.classList.add('hidden'); }, 300);
+        }
+
+        // 点击背景关闭
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    </script>
+</body>
+</html>

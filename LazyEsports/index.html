@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>慵懒电竞 - 三角洲专业陪玩 · 极致开黑体验</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+		<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap"
+			rel="stylesheet">
+		<script>
+			tailwind.config = {
+				theme: {
+					extend: {
+						colors: {
+							pink: {
+								light: '#FFF0F3',
+								DEFAULT: '#FF6B81',
+								dark: '#E84A5F',
+								soft: '#FF8E9E'
+							},
+							purple: {
+								light: '#F3E8FF',
+								DEFAULT: '#A855F7',
+								dark: '#7C3AED'
+							},
+							pixel: '#2D3436',
+						},
+						fontFamily: {
+							cartoon: ['"Noto Sans SC"', 'sans-serif']
+						},
+						animation: {
+							'bounce-slow': 'bounce-slow 3s infinite',
+							'float': 'float 4s ease-in-out infinite'
+						},
+						keyframes: {
+							'bounce-slow': {
+								'0%, 100%': {
+									transform: 'translateY(-5%)'
+								},
+								'50%': {
+									transform: 'translateY(0)'
+								}
+							},
+							'float': {
+								'0%, 100%': {
+									transform: 'translateY(0px)'
+								},
+								'50%': {
+									transform: 'translateY(-15px)'
+								}
+							}
+						}
+					}
+				},
+			}
+
+			// 1. 敬请期待弹窗
+			function showComingSoon() {
+				const overlay = document.getElementById('toastOverlay');
+				overlay.classList.remove('hidden');
+				setTimeout(() => {
+					overlay.classList.add('opacity-100');
+					overlay.firstElementChild.classList.replace('scale-90', 'scale-100');
+				}, 10);
+			}
+
+			function hideToast() {
+				const overlay = document.getElementById('toastOverlay');
+				overlay.classList.replace('opacity-100', 'opacity-0');
+				overlay.firstElementChild.classList.replace('scale-100', 'scale-90');
+				setTimeout(() => overlay.classList.add('hidden'), 300);
+			}
+
+			// 2. 客服二维码弹出逻辑
+			function showQRModal() {
+				const activeSrc = document.getElementById('active-qr').src;
+				const activeName = document.getElementById('cs-name').innerText;
+				document.getElementById('modalQRImg').src = activeSrc;
+				document.getElementById('modalQRName').innerText = activeName;
+
+				const modal = document.getElementById('qrPopupModal');
+				modal.classList.remove('hidden');
+				setTimeout(() => {
+					modal.classList.add('opacity-100');
+					modal.firstElementChild.classList.replace('scale-90', 'scale-100');
+				}, 10);
+			}
+
+			function hideQRModal() {
+				const modal = document.getElementById('qrPopupModal');
+				modal.classList.replace('opacity-100', 'opacity-0');
+				modal.firstElementChild.classList.replace('scale-100', 'scale-90');
+				setTimeout(() => modal.classList.add('hidden'), 300);
+			}
+
+			// 3. 客服自动换班逻辑 (北京时间)
+			function updateCustomerService() {
+				const config = [{
+						name: "深夜客服-考拉",
+						time: "00:00-08:00",
+						qr: "img/img-24-8.jpg",
+						start: 0,
+						end: 8
+					},
+					{
+						name: "阳光客服-小馨",
+						time: "08:00-16:00",
+						qr: "img/qr_08_16.png",
+						start: 8,
+						end: 16
+					},
+					{
+						name: "晚班客服-sty",
+						time: "16:00-24:00",
+						qr: "img/img-16-24.png",
+						start: 16,
+						end: 24
+					}
+				];
+
+				const now = new Date();
+				const bjTime = new Date(now.toLocaleString("en-US", {
+					timeZone: "Asia/Shanghai"
+				}));
+				const hour = bjTime.getHours();
+
+				const active = config.find(c => hour >= c.start && hour < c.end);
+				if (active) {
+					document.getElementById('active-qr').src = active.qr;
+					document.getElementById('cs-name').innerText = active.name;
+					document.getElementById('cs-shift').innerText = active.time;
+				}
+			}
+
+			window.onload = updateCustomerService;
+		</script>
+		<style type="text/tailwindcss">
+			@layer utilities {
+            .pixel-text { text-shadow: 2px 2px 0 #2D3436; }
+            .neo-brutalism { box-shadow: 4px 4px 0px #2D3436; transition: all 0.2s; }
+            .neo-brutalism:hover { box-shadow: 2px 2px 0px #2D3436; transform: translate(2px, 2px); }
+            .rule-item { @apply flex items-start gap-4 p-4 rounded-xl border-2 border-transparent hover:border-pink/20 hover:bg-white/5 transition-all; }
+            .rule-number { @apply bg-pink text-white w-7 h-7 rounded flex items-center justify-center font-bold text-sm shrink-0 mt-0.5 shadow-[2px_2px_0px_#2D3436]; }
+            .highlight-gold { @apply text-yellow-400 font-bold px-1; }
+            .highlight-pink { @apply text-pink-soft font-bold px-1; }
+            .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 2px solid rgba(255, 255, 255, 0.5); }
+        }
+        body {
+            background-image: radial-gradient(#FF6B81 0.5px, transparent 0.5px), radial-gradient(#FF6B81 0.5px, #FFF8F9 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            background-color: #FFF8F9;
+        }
+    </style>
+	</head>
+	<body class="text-pixel font-cartoon antialiased">
+
+		<!-- 顶部 Banner -->
+		<header class="relative overflow-hidden pt-6 pb-12">
+			<div class="max-w-7xl mx-auto px-4">
+				<div class="relative rounded-[2rem] overflow-hidden border-4 border-pixel shadow-[8px_8px_0px_#2D3436]">
+					<img src="img/yonglan.jpg" alt="慵懒电竞"
+						class="w-full h-auto object-cover transform hover:scale-105 transition-transform duration-700">
+					<!-- <div class="absolute top-4 left-4 bg-pixel text-white px-4 py-1 rounded-full text-sm font-bold tracking-widest uppercase">Delta Force Professional</div> -->
+				</div>
+			</div>
+		</header>
+
+		<main class="max-w-6xl mx-auto px-4 pb-24">
+			<!-- 三角洲服务板块 -->
+			<section class="mb-24 mt-12">
+				<div class="flex items-center justify-center gap-4 mb-12">
+					<div class="h-[2px] w-12 bg-pixel"></div>
+					<h2 class="text-3xl md:text-4xl font-black text-center pixel-text text-white">
+						<span class="text-pink">三角洲</span>端游服务
+					</h2>
+					<div class="h-[2px] w-12 bg-pixel"></div>
+				</div>
+
+				<div class="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+					<a href="shangxing.html" class="group">
+						<div
+							class="bg-white rounded-3xl p-4 border-4 border-pixel shadow-[6px_6px_0px_#2D3436] transition-all group-hover:-translate-y-2">
+							<div class="aspect-square rounded-2xl overflow-hidden mb-4 border-2 border-pixel">
+								<img src="img/logo.jpg" class="w-full h-full object-cover">
+							</div>
+							<h3 class="text-lg font-bold text-center group-hover:text-pink">上新玩法</h3>
+							<p class="text-xs text-center text-gray-500 mt-1">最新赛季 极速上手</p>
+						</div>
+					</a>
+					<a href="peipei.html" class="group">
+						<div
+							class="bg-white rounded-3xl p-4 border-4 border-pixel shadow-[6px_6px_0px_#2D3436] transition-all group-hover:-translate-y-2">
+							<div class="aspect-square rounded-2xl overflow-hidden mb-4 border-2 border-pixel">
+								<img src="img/logo.jpg" class="w-full h-full object-cover">
+							</div>
+							<h3 class="text-lg font-bold text-center group-hover:text-pink">陪陪/体验/护航</h3>
+							<p class="text-xs text-center text-gray-500 mt-1">高颜值 强技术</p>
+						</div>
+					</a>
+					<a href="fun.html" class="group">
+						<div
+							class="bg-white rounded-3xl p-4 border-4 border-pixel shadow-[6px_6px_0px_#2D3436] transition-all group-hover:-translate-y-2">
+							<div class="aspect-square rounded-2xl overflow-hidden mb-4 border-2 border-pixel">
+								<img src="img/logo.jpg" class="w-full h-full object-cover">
+							</div>
+							<h3 class="text-lg font-bold text-center group-hover:text-pink">爆款趣味单</h3>
+							<p class="text-xs text-center text-gray-500 mt-1">稳定撤离 资源满满</p>
+						</div>
+					</a>
+					<!-- onclick="showComingSoon()" -->
+					<a href="studio_code.html" class="group">
+						<div class="group cursor-pointer">
+							<div
+								class="bg-white rounded-3xl p-4 border-4 border-pixel shadow-[6px_6px_0px_#2D3436] transition-all group-hover:-translate-y-2 group-hover:bg-purple-light">
+								<div
+									class="aspect-square rounded-2xl overflow-hidden mb-4 border-2 border-pixel bg-gray-50 flex items-center justify-center relative">
+									<img src="img/logo.jpg"
+										class="w-full h-full object-cover ">
+	<!-- 								<div class="absolute inset-0 flex items-center justify-center">
+										<i
+											class="fas fa-hammer text-4xl text-pixel opacity-20 group-hover:rotate-12 transition-transform"></i>
+									</div> -->
+								</div>
+								<h3 class="text-lg font-bold text-center group-hover:text-purple transition-colors">主播同款
+								</h3>
+								<p class="text-xs text-center text-gray-500 mt-1">主播力荐 · 开箱即用</p>
+							</div>
+						</div>
+					</a>
+				</div>
+			</section>
+
+			<!-- 16条助手规则 -->
+			<section class="mb-24">
+				<div class="flex items-center justify-center gap-4 mb-10">
+					<div class="h-[2px] w-12 bg-pixel"></div>
+					<h2 class="text-3xl md:text-4xl font-black text-center pixel-text text-white">
+						<span class="text-pink">板板</span>贴心助手
+					</h2>
+					<div class="h-[2px] w-12 bg-pixel"></div>
+				</div>
+				<div
+					class="bg-pixel text-white rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-pixel relative">
+					<div
+						class="bg-white text-pixel p-6 border-b-4 border-pixel flex flex-col md:flex-row justify-between items-center gap-4">
+						<div class="flex items-center gap-3">
+							<i class="fas fa-shield-halved text-2xl text-pink"></i>
+							<span class="text-xl font-black tracking-tight">LAZY ESPORTS 服务协议 & 规则说明</span>
+						</div>
+						<div class="bg-pink text-white px-4 py-1 rounded-full text-sm font-bold animate-pulse">2026 最新标准
+						</div>
+					</div>
+					<div class="p-6 md:p-10 grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-2">
+						<div class="space-y-1">
+							<div class="rule-item"><span class="rule-number">1</span>
+								<p class="text-gray-300">打手包所有的<span class="text-white font-bold">过点卡</span>。</p>
+							</div>
+							<div class="rule-item"><span class="rule-number">2</span>
+								<p class="text-gray-300">死亡/丢包/撤离失败均算炸单。炸单补保底：<span class="highlight-pink">巴克什+60w /
+										航天+65w / 监狱+70w</span>。</p>
+							</div>
+							<div class="rule-item"><span class="rule-number">3</span>
+								<p class="text-gray-300">若护航双倒，板板完成击杀并撤离成功，该局保底只计入<span
+										class="highlight-pink">一半</span>。</p>
+							</div>
+							<div class="rule-item"><span class="rule-number">4</span>
+								<p class="text-gray-300">不满意可联系客服<span class="text-white font-bold">免费更换打手</span>。</p>
+							</div>
+							<div class="rule-item"><span class="rule-number">5</span>
+								<p class="text-gray-300">订单开始15分钟内可换人；超过需补<span class="highlight-pink">20%订单费</span>。
+								</p>
+							</div>
+							<div class="rule-item border-2 border-pink/30 bg-pink/5 hover:border-pink"><span
+									class="rule-number">6</span>
+								<p class="text-white font-bold">私加陪玩,老板举报即奖 <span
+										class="text-yellow-400 text-xl font-black">888元</span> 现金！</p>
+							</div>
+							<div class="rule-item"><span class="rule-number">7</span>
+								<p class="text-gray-300">超稀有大红（非洲之心等）<span
+										class="text-white font-bold underline">必须给板板</span>。</p>
+							</div>
+							<div class="rule-item"><span class="rule-number">8</span>
+								<p class="text-gray-300">严禁卡保底，必须比规定超过<span class="highlight-gold">30w</span>。</p>
+							</div>
+						</div>
+						<div class="space-y-1 border-t lg:border-t-0 lg:border-l border-white/10 lg:pl-10">
+							<div class="rule-item"><span class="rule-number">9</span>
+								<p class="text-gray-300">其余六套板板有权不要。让头计入击杀数。</p>
+							</div>
+							<div class="rule-item"><span class="rule-number">10</span>
+								<p class="text-gray-300">陪玩让头数量计算入陪玩击杀数量。</p>
+							</div>
+							<div class="rule-item"><span class="rule-number">11</span>
+								<p class="text-gray-300">最低四头五甲进图，不卡保底不藏红。</p>
+							</div>
+							<div class="rule-item"><span class="rule-number">12</span>
+								<p class="text-gray-300">可要求堵桥打法，此时<span class="text-white font-bold">不限制击杀数</span>。</p>
+							</div>
+							<div class="rule-item"><span class="rule-number">13</span>
+								<p class="text-gray-300">护航单需听指挥。若因不听导致失败不补单。</p>
+							</div>
+							<div class="rule-item"><span class="rule-number">14</span>
+								<p class="text-gray-300">800元+长单5h后可存单；放鸽子赔板板<span class="highlight-gold">200元</span>。
+								</p>
+							</div>
+							<div class="rule-item"><span class="rule-number">15</span>
+								<p class="text-gray-300">畅饮女陪击杀-2/h。售后限24h。</p>
+							</div>
+							<div class="rule-item"><span class="rule-number">16</span>
+								<p class="text-gray-300">外挂对局判定成功击杀数<span class="highlight-pink">-2/h</span>。板板开挂无售后。
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- 预存/活动专区 -->
+			<section class="mb-24">
+				<h2 class="text-3xl md:text-4xl font-bold mb-12 text-center pixel-text text-white"><span
+						class="text-purple">特惠</span> & 惊喜</h2>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+					<div
+						class="glass-card rounded-3xl p-8 border-2 border-pink-soft hover:shadow-2xl transition-all relative overflow-hidden group">
+						<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-125 transition-transform"><i
+								class="fas fa-coins text-6xl text-pink"></i></div>
+						<h3 class="text-2xl font-bold mb-4 flex items-center text-pink"><i
+								class="fas fa-heart mr-3 animate-pulse"></i> 预存活动</h3>
+						<p class="text-gray-600 leading-relaxed text-lg">多充多送，尊享专属折扣与优先派单权。</p>
+					</div>
+					<div
+						class="glass-card rounded-3xl p-8 border-2 border-purple-light hover:shadow-2xl transition-all relative overflow-hidden group">
+						<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-125 transition-transform"><i
+								class="fas fa-gift text-6xl text-purple"></i></div>
+						<h3 class="text-2xl font-bold mb-4 flex items-center text-purple text-dark"><i
+								class="fas fa-gift mr-3"></i> 礼物单</h3>
+						<p class="text-gray-600 leading-relaxed text-lg">赠送心仪陪陪，解锁专属互动空间及特殊福利。</p>
+					</div>
+				</div>
+			</section>
+
+			<!-- 下单引导 (三班倒动态二维码) -->
+			<section id="order" class="text-center">
+				<div
+					class="bg-white rounded-[3rem] p-8 md:p-16 border-4 border-pixel shadow-[12px_12px_0px_#FF6B81] max-w-4xl mx-auto relative overflow-hidden">
+					<h2 class="text-4xl md:text-5xl font-black mb-6 pixel-text text-pink tracking-tighter">READY TO
+						PLAY?</h2>
+					<p class="mb-10 font-bold text-gray-600 italic">
+						当前值班：<span id="cs-name" class="text-pink">加载中...</span>
+						(<span id="cs-shift" class="text-sm">时间段</span>)
+					</p>
+
+					<div class="flex flex-col md:flex-row items-center justify-center gap-12">
+						<div class="relative group cursor-zoom-in" onclick="showQRModal()">
+							<div
+								class="absolute -inset-4 bg-gradient-to-tr from-pink to-purple rounded-[2.5rem] blur opacity-25 group-hover:opacity-60 transition duration-500">
+							</div>
+							<div
+								class="relative bg-white p-4 rounded-[1.5rem] border-4 border-pixel shadow-xl animate-float">
+								<img id="active-qr" src="img/logo.jpg" alt="客服二维码"
+									class="w-48 h-48 object-cover rounded-lg">
+								<div class="mt-4 font-black text-pixel flex items-center justify-center gap-2">
+									<i class="fas fa-search-plus text-pink"></i> 点击放大扫码
+								</div>
+							</div>
+						</div>
+						<div class="text-left space-y-4">
+							<div class="flex items-center gap-3 bg-pink-light p-4 rounded-2xl border-2 border-pink/20">
+								<i class="fab fa-weixin text-3xl text-green-500"></i>
+								<span class="font-bold text-lg">微信扫码：慵懒电竞</span>
+							</div>
+							<p class="text-gray-500 text-sm max-w-xs leading-relaxed">
+								24小时全天候值班系统，点击左侧二维码弹出大图。
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<!-- 弹窗 1: 敬请期待 -->
+		<div id="toastOverlay" onclick="hideToast()"
+			class="fixed inset-0 z-[100] flex items-center justify-center bg-black/5 backdrop-blur-[2px] hidden opacity-0 transition-all duration-300">
+			<div
+				class="bg-white border-4 border-pixel p-8 rounded-[2rem] shadow-[10px_10px_0px_#A855F7] flex flex-col items-center gap-3 transform scale-90 transition-all duration-300">
+				<div
+					class="w-16 h-16 bg-purple-light rounded-full flex items-center justify-center border-2 border-pixel">
+					<i class="fas fa-wrench text-2xl text-purple animate-bounce"></i>
+				</div>
+				<span class="text-xl font-black pixel-text text-white">敬请期待 ✨</span>
+				<p class="text-gray-500 font-bold text-sm">此功能正在拼命开发中...</p>
+				<p class="text-[10px] text-gray-400">点击任意位置关闭</p>
+			</div>
+		</div>
+
+		<!-- 弹窗 2: 客服大图 -->
+		<div id="qrPopupModal" onclick="hideQRModal()"
+			class="fixed inset-0 z-[110] flex items-center justify-center bg-black/40 backdrop-blur-md hidden opacity-0 transition-all duration-300">
+			<div
+				class="bg-white border-[6px] border-pixel p-4 rounded-[2.5rem] shadow-[20px_20px_0px_#FF6B81] flex flex-col items-center gap-4 transform scale-90 transition-all duration-300 max-w-[90%] md:max-w-md">
+				<div class="w-full flex justify-between items-center px-2">
+					<span id="modalQRName" class="font-black text-pink">在线客服</span>
+					<span class="text-xs font-bold text-gray-400">长按识别二维码</span>
+				</div>
+				<img id="modalQRImg" src="" class="w-full h-auto rounded-2xl border-4 border-pixel">
+				<p class="text-pixel font-bold text-sm">点击任意位置关闭</p>
+			</div>
+		</div>
+
+		<!-- 页脚 - 已修正居中逻辑 -->
+		<footer class="bg-pixel text-white py-12">
+			<div class="max-w-6xl mx-auto px-4 flex flex-col items-center justify-center text-center">
+				<p class="text-gray-400 mb-2">服务时间：24/7 全天候在线</p>
+				<p class="text-gray-600 text-xs tracking-widest uppercase">© 2026 LAZY ESPORTS. 未成年禁止消费</p>
+			</div>
+		</footer>
+	</body>
+</html>
